@@ -7,8 +7,9 @@ class App extends Component {
   state = { };
   render() {
     return (
-      <div>
-        <header>
+      <div className='App'>
+        <header className='App-header'>
+          Country Gold Metal Counter
         </header>
         <Country countryName='test'>
         </Country>
