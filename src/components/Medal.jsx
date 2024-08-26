@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
 import Button from '@mui/material/Button';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar'
+import Avatar from '@mui/material/Avatar'
+import ListItemText from '@mui/material/ListItemText'
+import IconButton from '@mui/material/IconButton';
+import Icon from '@mdi/react';
+import {mdiMedal,mdiNumericPositive1,mdiNumericNegative1} from '@mdi/js';
 
 class Medal extends Component {
 
@@ -16,29 +23,55 @@ class Medal extends Component {
             case undefined:
                 return 'Unavailable';
             case 0:
-                return 'None';
+                return 'No';
             default:
                 return medalCount;
+        }
+    }
+
+    renderMedalColor(medalName){
+        switch (medalName.toLowerCase()) {
+            case "bronze":
+                return "brown";
+            default:
+                return medalName;
         }
     }
 
     render(){
         const { name, medal, count } = this.props.medal;
         return (
-            <div className='flex-container quarter-screen center'>
-                <div className='flex-child'>
-                    { name }
+            <ListItem secondaryAction={
+                <div>
+                    <IconButton edge="end" aria-label="decrement_medal_count" disabled={count === 0}
+                        onClick={this.handleMedalDecrement}>
+                        <Icon path={mdiNumericNegative1}
+                            title={"Add a "+name+" medal"}
+                            size={1}
+                            color={this.renderMedalColor(name)}
+                        />
+                    </IconButton>
+                    <IconButton edge="end" aria-label="increment_medal_count"
+                        onClick={this.handleMedalIncrement}>
+                        <Icon path={mdiNumericPositive1}
+                            title={"Add a "+name+" medal"}
+                            size={1}
+                            color={this.renderMedalColor(name)}
+                        />
+                    </IconButton>
                 </div>
-                <div className='flex-child'>
-                    { this.renderMedalCount(count) }
-                </div>
-                <Button variant="contained" onClick={this.handleMedalIncrement} className="square-button" >
-                    +
-                </Button>
-                <Button variant="contained" disabled={medal === 0} onClick={this.handleMedalDecrement} className="square-button" >
-                    -
-                </Button>
-            </div>
+            }>
+            <ListItemAvatar>
+                <IconButton>
+                    <Icon path={mdiMedal}
+                        title={count+" "+name+" medals"}
+                        size={1}
+                        color={this.renderMedalColor(name)}
+                    />
+                </IconButton>
+            </ListItemAvatar>
+            <ListItemText primary={this.renderMedalCount(count)+" "+name}/>
+            </ListItem>
         );
     }
 }

@@ -4,6 +4,8 @@ import Medal from './Medal'
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import List from '@mui/material/List';
 
 class Country extends Component {
     
@@ -32,28 +34,28 @@ class Country extends Component {
         const { name, medals } = this.props.country;
         return (
             // <div className='flex-container quarter-screen center'>
-            <div className=''>
-
-                {/* <code>
-                    { this.props.country }
-                </code> */}
-                <div className='flex-child'>
-                    { name }
-                </div>
-                <div>
-                    {medals.map(medal =>
-                        <Medal
-                            key={medal.name}
-                            medal={medal}
-                            onMedalUpdate={this.handleMedalUpdate}
-                        />
-                    )}
-                </div>
-                
-                <div className='flex-child'>
-                    { this.totalMedals() }
-                </div>
-            </div>
+            <Card variant="outlined">
+                <CardHeader
+                    // avatar={
+                    // <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                    // R
+                    // </Avatar>
+                    // }
+                    title={name}
+                    subheader={this.totalMedals()+' Total Medals'}
+                />
+                <CardContent>
+                    <List>
+                        {medals.map(medal =>
+                            <Medal
+                                key={medal.name}
+                                medal={medal}
+                                onMedalUpdate={this.handleMedalUpdate}
+                            />
+                        )}
+                    </List>
+                </CardContent>
+            </Card>
         );
     }
 }

@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Icon from '@mdi/react';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+
 import Country from './components/Country'
+import {mdiMedal} from '@mdi/js';
 
 class App extends Component {
   state = {
@@ -37,7 +42,7 @@ class App extends Component {
         { 
           id: "bronze",
           name: "Bronze",
-          count: 7
+          count: 0
         },
       ] },
       { id: 3, name: 'Germany', medals: [
@@ -73,10 +78,11 @@ class App extends Component {
     
     const updateCountryIndex = this.state.countries.map(c => c.id).indexOf(countryId);
     const countriesCopy = this.state.countries;
-    countriesCopy[updateCountryIndex].medals[countriesCopy[updateCountryIndex].medals.map(m => m.id).indexOf(medalId)].count += medalChange;
+    let medalsIndex = countriesCopy[updateCountryIndex].medals.map(m => m.id).indexOf(medalId);
+    countriesCopy[updateCountryIndex].medals[medalsIndex].count += medalChange;
 
-    if(countriesCopy[updateCountryIndex].gold < 0){
-      countriesCopy[updateCountryIndex].gold = 0;
+    if(countriesCopy[updateCountryIndex].medals[medalsIndex].count < 0){
+      countriesCopy[updateCountryIndex].medals[medalsIndex].count = 0;
     }
 
     this.setState({countries: countriesCopy})
@@ -85,19 +91,51 @@ class App extends Component {
   render() {
     return (
       <div className='App'>
-        <header className='App-header'>
-          Country Gold Medal Counter
-          { this.getTotalMedalCount('gold') }
-          { this.getTotalMedalCount('silver') }
-          { this.getTotalMedalCount('bronze') }
+        <header className='App-header flex-container'>
+          <div className='flex-container'>
+            Country Gold Medal Counter
+            <div className="flex-child flex-container" style={{"margin-left": "1em"}}>
+              Totals:
+              <div>
+                {<Icon path={mdiMedal}
+                  title={this.getTotalMedalCount('gold')+" total gold medals"}
+                  size={1}
+                  color='gold'
+                />}
+                  {this.getTotalMedalCount('gold')}
+              </div>
+              <div className="flex-child flex-container">
+                {<Icon path={mdiMedal}
+                  title={this.getTotalMedalCount('silver')+" total silver medals"}
+                  size={1}
+                  color='silver'
+                />}
+                {this.getTotalMedalCount('silver')}
+              </div>
+              <div className="flex-child flex-container">
+                {<Icon path={mdiMedal}
+                  title={this.getTotalMedalCount('bronze')+" total bronze medals"}
+                  size={1}
+                  color='brown'
+                />}
+                {this.getTotalMedalCount('bronze')}
+              </div>
+            </div>
+          </div>
         </header>
-        {this.state.countries.map(country =>
-          <Country
-            key={country.id}
-            country={country}
-            onMedalUpdate={this.handleMedalUpdate}
-          />
-        )}
+        <body>
+        <Grid container>
+          {this.state.countries.map(country =>
+            <Paper elevation={1} key={country.id} style={{"min-width": "250px", "margin": "1em"}}>
+              <Country
+                key={country.id}
+                country={country}
+                onMedalUpdate={this.handleMedalUpdate}
+              />
+            </Paper>
+          )}
+        </Grid>
+        </body>
       </div>
     )
   }
