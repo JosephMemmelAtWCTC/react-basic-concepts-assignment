@@ -50,6 +50,13 @@
   margin: auto;
 }
 
+.square-button{
+  flex: 0.05;
+}
+
+button:disabled{
+  opacity: 0.5;
+}
 
 .flex-child {
   flex: 1;
