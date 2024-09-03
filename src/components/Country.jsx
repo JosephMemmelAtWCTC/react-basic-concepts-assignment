@@ -6,6 +6,10 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import List from '@mui/material/List';
+import Grid from '@mui/material/Grid';
+import Icon from '@mdi/react';
+
+import {mdiEarthMinus} from '@mdi/js';
 
 class Country extends Component {
     
@@ -13,17 +17,8 @@ class Country extends Component {
         this.props.onMedalUpdate(this.props.country.id, medalId, change)
     }
 
-    renderGoldCount(goldCount) {
-        switch (goldCount) {
-            case null:
-                // return 'Unavailable';
-            case undefined:
-                return 'Unavailable';
-            case 0:
-                return 'None';
-            default:
-                return goldCount;
-        }
+    handleRemoveCountry = () => {
+        this.props.onRemoveCountry(this.props.country.id);
     }
 
     totalMedals(){
@@ -34,7 +29,7 @@ class Country extends Component {
         const { name, medals } = this.props.country;
         return (
             // <div className='flex-container quarter-screen center'>
-            <Card variant="outlined">
+            <Card variant="outlined" style={{height: "100%"}}>
                 <CardHeader
                     // avatar={
                     // <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -55,6 +50,22 @@ class Country extends Component {
                         )}
                     </List>
                 </CardContent>
+                <Grid container justifyContent="center" alignItems="center">
+                    <Grid>
+                        <Button variant="contained"
+                            onClick={this.handleRemoveCountry}
+                            color={'warning'}
+                            startIcon={
+                                <Icon path={mdiEarthMinus}
+                                    title={""}
+                                    size={1}
+                                />
+                            }
+                        >
+                            Remove
+                        </Button>
+                    </Grid>
+                </Grid>
             </Card>
         );
     }

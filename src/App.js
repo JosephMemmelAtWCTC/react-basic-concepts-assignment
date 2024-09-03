@@ -5,7 +5,8 @@ import Icon from '@mdi/react';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 
-import Country from './components/Country'
+import Country from './components/Country';
+import NewCountry from './components/NewCountry';
 import {mdiMedal} from '@mdi/js';
 
 class App extends Component {
@@ -88,13 +89,50 @@ class App extends Component {
     this.setState({countries: countriesCopy})
   }
 
+  handleNewCountry = (newName, gold, silver, bronze) => {
+    const mutableCountries = this.state.countries.concat({
+      id: this.state.countries.reduce((a,b) => a.id > b.id ? a:b).id+1, name: newName, medals: [
+        { 
+          id: "gold",
+          name: "Gold",
+          count: gold
+        },
+        { 
+          id: "silver",
+          name: "Silver",
+          count: silver
+        },
+        { 
+          id: "bronze",
+          name: "Bronze",
+          count: bronze
+        },
+      ]
+    });
+    this.setState({ countries: mutableCountries });
+    console.log("countries", this.state.countries);
+  }
+
+  handleRemoveCountry = (countryId) => {
+    const mutableCountries = this.state.countries.filter(c => c.id !== countryId);
+
+    this.setState({ countries: mutableCountries });
+
+  }
+
   render() {
+    const newCountryDefaults={
+      newName: "",
+      gold: 0,
+      silver: 0,
+      bronze: 0,
+    }
     return (
       <div className='App'>
         <header className='App-header flex-container'>
           <div className='flex-container'>
             Country Gold Medal Counter
-            <div className="flex-child flex-container" style={{"margin-left": "1em"}}>
+            <div className="flex-child flex-container" style={{MarginLeft: "1em"}}>
               Totals:
               <div>
                 {<Icon path={mdiMedal}
@@ -126,14 +164,21 @@ class App extends Component {
         <body>
         <Grid container>
           {this.state.countries.map(country =>
-            <Paper elevation={1} key={country.id} style={{"min-width": "250px", "margin": "1em"}}>
+            <Paper elevation={1} key={country.id} style={{minWidth: "250px", "margin": "1em"}}>
               <Country
                 key={country.id}
                 country={country}
                 onMedalUpdate={this.handleMedalUpdate}
+                onRemoveCountry={this.handleRemoveCountry}
               />
             </Paper>
           )}
+          <Paper elevation={1} key={0} style={{minWidth: "270px", "margin": "1em"}}>
+            <NewCountry
+              defaults={ newCountryDefaults }
+              onNewCountry={ this.handleNewCountry }
+            />
+          </Paper>
         </Grid>
         </body>
       </div>

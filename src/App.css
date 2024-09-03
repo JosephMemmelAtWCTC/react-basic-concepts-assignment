@@ -61,3 +61,11 @@ button:disabled{
 .flex-child {
   flex: 1;
 }  
+
+.new-country {
+  background-color: #721010e3;
+}
+
+.half-text-field {
+  width: 10em;
+}
